@@ -1,0 +1,26 @@
+{
+  "name": "miniproyecto-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API académica de ventas con Express, Sequelize y MySQL",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon --watch .env --watch src --watch models --watch config src/server.js",
+    "start": "node src/server.js",
+    "db:create": "sequelize-cli db:create",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.6",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "sequelize-cli": "^6.6.5"
+  }
+}

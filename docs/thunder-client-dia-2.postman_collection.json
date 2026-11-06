@@ -1,0 +1,3454 @@
+{
+  "info": {
+    "_postman_id": "a1e9b277-c906-4aa8-8a37-377243cf2402",
+    "name": "Minimercado La Esquina - API de 18 tablas",
+    "description": "Colección académica para Postman o Thunder Client. Requiere iniciar sesión, guardar el token y completar las variables de IDs con las respuestas. No contiene credenciales reales ni datos de negocio precargados.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3002/api",
+      "type": "string"
+    },
+    {
+      "key": "runSuffix",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "testPassword",
+      "value": "Clase-ORM-2026!Aa",
+      "type": "string"
+    },
+    {
+      "key": "clienteId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "facturaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "detalleId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "detalleCascadaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoriaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "marcaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "unidadMedidaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "proveedorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productoProveedorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "compraId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "detalleCompraId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "metodoPagoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pagoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "existenciaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "movimientoId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "devolucionId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "detalleDevolucionId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 ? Inicio",
+      "item": [
+        {
+          "name": "Inicializar datos variables",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health",
+            "description": "Esperado: HTTP 200.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('runSuffix', Date.now().toString()); pm.collectionVariables.set('token', '');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 ? Autenticaci?n",
+      "item": [
+        {
+          "name": "POST registro",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/register",
+            "description": "Esperado: HTTP 201.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Usuario de prueba\",\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST correo duplicado",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/register",
+            "description": "Esperado: HTTP 400.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Usuario duplicado\",\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST login con contrase?a incorrecta",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"incorrecta\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.collectionVariables.set('token', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /me con token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /me sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 ? Autorizaci?n (24 respuestas 401)",
+      "item": [
+        {
+          "name": "POST /clientes sin token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clientes",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /clientes sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /clientes/id sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /clientes/id sin token",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/clientes/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH /clientes/id sin token",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/clientes/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /clientes/id sin token",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/clientes/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /productos sin token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/productos",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /productos sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/productos",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /productos/id sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/productos/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /productos/id sin token",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/productos/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH /productos/id sin token",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/productos/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /productos/id sin token",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/productos/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /facturas sin token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/facturas",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /facturas sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/facturas",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /facturas/id sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/facturas/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /facturas/id sin token",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/facturas/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH /facturas/id sin token",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/facturas/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /facturas/id sin token",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/facturas/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /detalles-factura sin token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /detalles-factura sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /detalles-factura/id sin token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /detalles-factura/id sin token",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/detalles-factura/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH /detalles-factura/id sin token",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/detalles-factura/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /detalles-factura/id sin token",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/detalles-factura/2147483647",
+            "description": "Esperado: HTTP 401.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 ? CRUD clientes",
+      "item": [
+        {
+          "name": "POST crear con datos inv?lidos",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clientes",
+            "description": "Esperado: HTTP 400.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear cliente",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/clientes",
+            "description": "Esperado: HTTP 201.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente de prueba {{runSuffix}}\",\n  \"correo\": \"cliente.{{runSuffix}}@example.test\",\n  \"telefono\": \"8888-1000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set('clienteId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET listar clientes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET consultar cliente por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes/{{clienteId}}",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET cliente inexistente",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes/2147483647",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT reemplazar cliente",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/clientes/{{clienteId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente actualizado\",\n  \"correo\": \"cliente.{{runSuffix}}@example.test\",\n  \"telefono\": \"8888-2000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH actualizar tel?fono",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/clientes/{{clienteId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telefono\": \"8888-3000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 ? CRUD productos",
+      "item": [
+        {
+          "name": "POST crear con precio inv?lido",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/productos",
+            "description": "Esperado: HTTP 400.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Producto inv?lido\",\n  \"precio\": -1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear producto",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/productos",
+            "description": "Esperado: HTTP 201.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Producto de prueba {{runSuffix}}\",\n  \"precio\": \"1250.50\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set('productoId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET listar productos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/productos",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET consultar producto por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/productos/{{productoId}}",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET producto inexistente",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/productos/2147483647",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT reemplazar producto",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/productos/{{productoId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Producto actualizado\",\n  \"precio\": \"1400.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH actualizar precio",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/productos/{{productoId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"precio\": \"1500.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 ? CRUD facturas",
+      "item": [
+        {
+          "name": "POST crear con cuerpo incompleto",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/facturas",
+            "description": "Esperado: HTTP 400.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear con cliente inexistente",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/facturas",
+            "description": "Esperado: HTTP 404.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": 2147483647\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear factura",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/facturas",
+            "description": "Esperado: HTTP 201.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set('facturaId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET listar facturas",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/facturas",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET consultar factura por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/facturas/{{facturaId}}",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET factura inexistente",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/facturas/2147483647",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT reemplazar factura",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/facturas/{{facturaId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteId\": \"{{clienteId}}\",\n  \"fecha\": \"2026-11-05\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH actualizar fecha",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/facturas/{{facturaId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-11-04\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 ? CRUD detalles de factura",
+      "item": [
+        {
+          "name": "POST crear con cantidad inv?lida",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 400.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"cantidad\": 0,\n  \"precioUnitario\": \"1250.50\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear con producto inexistente",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 404.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"productoId\": 2147483647,\n  \"cantidad\": 1,\n  \"precioUnitario\": \"1250.50\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear detalle",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 201.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"cantidad\": 2,\n  \"precioUnitario\": \"1250.50\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set('detalleId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST crear detalle para probar cascada",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 201.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"cantidad\": 1,\n  \"precioUnitario\": \"1250.50\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.collectionVariables.set('detalleCascadaId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET listar detalles",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET consultar detalle por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura/{{detalleId}}",
+            "description": "Esperado: HTTP 200."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET detalle inexistente",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura/2147483647",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT reemplazar detalle",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/detalles-factura/{{detalleId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"cantidad\": 3,\n  \"precioUnitario\": \"1400.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH actualizar cantidad",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/detalles-factura/{{detalleId}}",
+            "description": "Esperado: HTTP 200.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": 4\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 ? Restricciones y eliminaci?n",
+      "item": [
+        {
+          "name": "DELETE cliente con factura asociada",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/clientes/{{clienteId}}",
+            "description": "Esperado: HTTP 409."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE producto con detalle asociado",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/productos/{{productoId}}",
+            "description": "Esperado: HTTP 409."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE detalle",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/detalles-factura/{{detalleId}}",
+            "description": "Esperado: HTTP 204."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET detalle eliminado",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura/{{detalleId}}",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE factura (elimina sus detalles)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/facturas/{{facturaId}}",
+            "description": "Esperado: HTTP 204."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET detalle eliminado en cascada",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-factura/{{detalleCascadaId}}",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE producto",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/productos/{{productoId}}",
+            "description": "Esperado: HTTP 204."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET producto eliminado",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/productos/{{productoId}}",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE cliente",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/clientes/{{clienteId}}",
+            "description": "Esperado: HTTP 204."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET cliente eliminado",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clientes/{{clienteId}}",
+            "description": "Esperado: HTTP 404."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 Catálogos y asociaciones",
+      "item": [
+        {
+          "name": "CRUD categorías",
+          "item": [
+            {
+              "name": "GET listar",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/categorias",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "POST crear",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/categorias",
+                "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Categoría {{runSuffix}}\",\n  \"descripcion\": \"Categoría académica de prueba\",\n  \"activa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "GET consultar por id",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/categorias/{{categoriaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "PUT reemplazar",
+              "request": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/categorias/{{categoriaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Categoría {{runSuffix}}\",\n  \"descripcion\": \"Categoría actualizada\",\n  \"activa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "PATCH actualizar campos",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/categorias/{{categoriaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"descripcion\": \"Descripción actualizada\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE eliminar si no tiene dependencias",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/categorias/{{categoriaId}}",
+                "description": "Esperado: HTTP 204 o 409 si está relacionado. Requiere token y las variables de IDs indicadas."
+              }
+            }
+          ]
+        },
+        {
+          "name": "CRUD marcas",
+          "item": [
+            {
+              "name": "GET listar",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/marcas",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "POST crear",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/marcas",
+                "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Marca {{runSuffix}}\",\n  \"descripcion\": \"Marca académica de prueba\",\n  \"activa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "GET consultar por id",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/marcas/{{marcaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "PUT reemplazar",
+              "request": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/marcas/{{marcaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Marca {{runSuffix}}\",\n  \"descripcion\": \"Marca actualizada\",\n  \"activa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "PATCH actualizar campos",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/marcas/{{marcaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"activa\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE eliminar si no tiene dependencias",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/marcas/{{marcaId}}",
+                "description": "Esperado: HTTP 204 o 409 si está relacionado. Requiere token y las variables de IDs indicadas."
+              }
+            }
+          ]
+        },
+        {
+          "name": "CRUD unidades de medida",
+          "item": [
+            {
+              "name": "GET listar",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/unidades-medida",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "POST crear",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/unidades-medida",
+                "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Unidad {{runSuffix}}\",\n  \"abreviatura\": \"u{{runSuffix}}\",\n  \"activa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "GET consultar por id",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/unidades-medida/{{unidadMedidaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "PUT reemplazar",
+              "request": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/unidades-medida/{{unidadMedidaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Unidad {{runSuffix}}\",\n  \"abreviatura\": \"u{{runSuffix}}\",\n  \"activa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "PATCH actualizar campos",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/unidades-medida/{{unidadMedidaId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"activa\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE eliminar si no tiene dependencias",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/unidades-medida/{{unidadMedidaId}}",
+                "description": "Esperado: HTTP 204 o 409 si está relacionado. Requiere token y las variables de IDs indicadas."
+              }
+            }
+          ]
+        },
+        {
+          "name": "CRUD proveedores",
+          "item": [
+            {
+              "name": "GET listar",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/proveedores",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "POST crear",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/proveedores",
+                "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Proveedor {{runSuffix}}\",\n  \"identificacion\": null,\n  \"contacto\": \"Contacto de prueba\",\n  \"correo\": \"proveedor.{{runSuffix}}@example.test\",\n  \"telefono\": \"8888-1000\",\n  \"direccion\": \"Costa Rica\",\n  \"activo\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "GET consultar por id",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/proveedores/{{proveedorId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "PUT reemplazar",
+              "request": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/proveedores/{{proveedorId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Proveedor {{runSuffix}}\",\n  \"identificacion\": null,\n  \"contacto\": \"Contacto actualizado\",\n  \"correo\": \"proveedor.{{runSuffix}}@example.test\",\n  \"telefono\": \"8888-1000\",\n  \"direccion\": \"Costa Rica\",\n  \"activo\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "PATCH actualizar campos",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/proveedores/{{proveedorId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"telefono\": \"8888-2000\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE eliminar si no tiene dependencias",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/proveedores/{{proveedorId}}",
+                "description": "Esperado: HTTP 204 o 409 si está relacionado. Requiere token y las variables de IDs indicadas."
+              }
+            }
+          ]
+        },
+        {
+          "name": "CRUD métodos de pago",
+          "item": [
+            {
+              "name": "GET listar",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/metodos-pago",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "POST crear",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/metodos-pago",
+                "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"codigo\": \"efectivo-{{runSuffix}}\",\n  \"nombre\": \"Efectivo {{runSuffix}}\",\n  \"activo\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "GET consultar por id",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/metodos-pago/{{metodoPagoId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "PUT reemplazar",
+              "request": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/metodos-pago/{{metodoPagoId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"codigo\": \"efectivo-{{runSuffix}}\",\n  \"nombre\": \"Efectivo {{runSuffix}}\",\n  \"activo\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "PATCH actualizar campos",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/metodos-pago/{{metodoPagoId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"activo\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE eliminar si no tiene dependencias",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/metodos-pago/{{metodoPagoId}}",
+                "description": "Esperado: HTTP 204 o 409 si está relacionado. Requiere token y las variables de IDs indicadas."
+              }
+            }
+          ]
+        },
+        {
+          "name": "CRUD relación producto-proveedor",
+          "item": [
+            {
+              "name": "GET listar",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/productos-proveedores",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "POST crear",
+              "request": {
+                "method": "POST",
+                "url": "{{baseUrl}}/productos-proveedores",
+                "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"proveedorId\": \"{{proveedorId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"codigoProveedor\": \"PROV-{{runSuffix}}\",\n  \"costoUnitario\": \"800.00\",\n  \"preferido\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "GET consultar por id",
+              "request": {
+                "method": "GET",
+                "url": "{{baseUrl}}/productos-proveedores/{{productoProveedorId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+              }
+            },
+            {
+              "name": "PUT reemplazar",
+              "request": {
+                "method": "PUT",
+                "url": "{{baseUrl}}/productos-proveedores/{{productoProveedorId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"proveedorId\": \"{{proveedorId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"codigoProveedor\": \"PROV-{{runSuffix}}\",\n  \"costoUnitario\": \"850.00\",\n  \"preferido\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "PATCH actualizar campos",
+              "request": {
+                "method": "PATCH",
+                "url": "{{baseUrl}}/productos-proveedores/{{productoProveedorId}}",
+                "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"costoUnitario\": \"825.00\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE eliminar si no tiene dependencias",
+              "request": {
+                "method": "DELETE",
+                "url": "{{baseUrl}}/productos-proveedores/{{productoProveedorId}}",
+                "description": "Esperado: HTTP 204 o 409 si está relacionado. Requiere token y las variables de IDs indicadas."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 Compras y recepción",
+      "item": [
+        {
+          "name": "GET listar compras",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/compras",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST crear compra en borrador",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/compras",
+            "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"proveedorId\": \"{{proveedorId}}\",\n  \"fecha\": \"2026-11-05\",\n  \"observaciones\": \"Compra académica de prueba\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET consultar compra",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/compras/{{compraId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT reemplazar compra en borrador",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/compras/{{compraId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"proveedorId\": \"{{proveedorId}}\",\n  \"fecha\": \"2026-11-05\",\n  \"observaciones\": \"Compra actualizada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH actualizar compra en borrador",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/compras/{{compraId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"observaciones\": \"Nota actualizada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST agregar detalle de compra",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-compra",
+            "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"compraId\": \"{{compraId}}\",\n  \"productoId\": \"{{productoId}}\",\n  \"cantidad\": \"10.000\",\n  \"costoUnitario\": \"800.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET listar detalles de compra",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-compra",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET consultar detalle de compra",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-compra/{{detalleCompraId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT reemplazar detalle en borrador",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/detalles-compra/{{detalleCompraId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": \"{{productoId}}\",\n  \"cantidad\": \"12.000\",\n  \"costoUnitario\": \"800.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH actualizar detalle en borrador",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/detalles-compra/{{detalleCompraId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": \"11.000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE eliminar detalle en borrador",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/detalles-compra/{{detalleCompraId}}",
+            "description": "Esperado: HTTP 204. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST recibir compra y sumar existencias",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/compras/{{compraId}}/recibir",
+            "description": "Esperado: HTTP 200; necesita al menos una línea. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST anular compra en borrador",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/compras/{{compraId}}/anular",
+            "description": "Esperado: HTTP 200 si sigue en borrador. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "DELETE eliminar compra en borrador",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/compras/{{compraId}}",
+            "description": "Esperado: HTTP 204 si sigue en borrador. Requiere token y las variables de IDs indicadas."
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 Ventas, cobros e inventario",
+      "item": [
+        {
+          "name": "POST confirmar factura y descontar existencias",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/facturas/{{facturaId}}/confirmar",
+            "description": "Esperado: HTTP 200; requiere factura en borrador con líneas y stock. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST anular factura según sus relaciones",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/facturas/{{facturaId}}/anular",
+            "description": "Esperado: HTTP 200 si cumple las reglas de anulación. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET listar pagos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pagos",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST registrar pago",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/pagos",
+            "description": "Esperado: HTTP 201; la factura debe estar confirmada. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"metodoPagoId\": \"{{metodoPagoId}}\",\n  \"monto\": \"500.00\",\n  \"referencia\": \"REF-{{runSuffix}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET consultar pago",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pagos/{{pagoId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT reemplazar datos del pago",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/pagos/{{pagoId}}",
+            "description": "Esperado: HTTP 200 si el monto no excede el saldo. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metodoPagoId\": \"{{metodoPagoId}}\",\n  \"monto\": \"450.00\",\n  \"referencia\": \"REF-{{runSuffix}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH actualizar monto",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/pagos/{{pagoId}}",
+            "description": "Esperado: HTTP 200 si el monto no excede el saldo. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": \"400.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE anular pago",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/pagos/{{pagoId}}",
+            "description": "Esperado: HTTP 204. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET listar existencias",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/existencias",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET consultar existencia por id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/existencias/{{existenciaId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET consultar existencia por producto",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/existencias/producto/{{productoId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT actualizar mínimo de existencias",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/existencias/{{existenciaId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidadMinima\": \"2.000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH actualizar mínimo de existencias",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/existencias/{{existenciaId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidadMinima\": \"3.000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE existencia (bloqueado para conservar el saldo)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/existencias/{{existenciaId}}",
+            "description": "Esperado: HTTP 409. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET listar movimientos de inventario",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/movimientos-inventario",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST registrar ajuste manual de inventario",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/movimientos-inventario",
+            "description": "Esperado: HTTP 201. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": \"{{productoId}}\",\n  \"tipo\": \"ajuste\",\n  \"cantidad\": \"1.000\",\n  \"nota\": \"Ajuste de prueba\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET consultar movimiento",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/movimientos-inventario/{{movimientoId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT movimiento (historial inmutable)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/movimientos-inventario/{{movimientoId}}",
+            "description": "Esperado: HTTP 409. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nota\": \"No se permite editar\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH movimiento (historial inmutable)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/movimientos-inventario/{{movimientoId}}",
+            "description": "Esperado: HTTP 409. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nota\": \"No se permite editar\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE movimiento (historial inmutable)",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/movimientos-inventario/{{movimientoId}}",
+            "description": "Esperado: HTTP 409. Requiere token y las variables de IDs indicadas."
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 Devoluciones",
+      "item": [
+        {
+          "name": "GET listar devoluciones",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/devoluciones",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST crear devolución en borrador",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/devoluciones",
+            "description": "Esperado: HTTP 201; requiere factura confirmada. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"fecha\": \"2026-11-05\",\n  \"motivo\": \"Producto devuelto de prueba\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET consultar devolución",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/devoluciones/{{devolucionId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT reemplazar devolución en borrador",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/devoluciones/{{devolucionId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"facturaId\": \"{{facturaId}}\",\n  \"fecha\": \"2026-11-05\",\n  \"motivo\": \"Motivo actualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH actualizar motivo",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/devoluciones/{{devolucionId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"Motivo actualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST agregar detalle de devolución",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/detalles-devolucion",
+            "description": "Esperado: HTTP 201; línea de una factura confirmada. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"devolucionId\": \"{{devolucionId}}\",\n  \"detalleFacturaId\": \"{{detalleId}}\",\n  \"cantidad\": \"1.000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET listar detalles de devolución",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-devolucion",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "GET consultar detalle de devolución",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/detalles-devolucion/{{detalleDevolucionId}}",
+            "description": "Esperado: HTTP 200. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "PUT reemplazar detalle de devolución",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/detalles-devolucion/{{detalleDevolucionId}}",
+            "description": "Esperado: HTTP 200 si la devolución sigue en borrador. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"devolucionId\": \"{{devolucionId}}\",\n  \"detalleFacturaId\": \"{{detalleId}}\",\n  \"cantidad\": \"1.000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH actualizar cantidad devuelta",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/detalles-devolucion/{{detalleDevolucionId}}",
+            "description": "Esperado: HTTP 200 si la devolución sigue en borrador. Requiere token y las variables de IDs indicadas.",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": \"1.000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE detalle de devolución en borrador",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/detalles-devolucion/{{detalleDevolucionId}}",
+            "description": "Esperado: HTTP 204. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "POST procesar devolución y reingresar existencias",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/devoluciones/{{devolucionId}}/procesar",
+            "description": "Esperado: HTTP 200; requiere por lo menos un detalle. Requiere token y las variables de IDs indicadas."
+          }
+        },
+        {
+          "name": "DELETE eliminar devolución en borrador",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/devoluciones/{{devolucionId}}",
+            "description": "Esperado: HTTP 204; una procesada responde HTTP 409. Requiere token y las variables de IDs indicadas."
+          }
+        }
+      ]
+    }
+  ]
+}

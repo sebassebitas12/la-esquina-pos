@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2280" height="1740" viewBox="0 0 2280 1740" role="img" aria-labelledby="title description">
+  <title id="title">Diagrama entidad-relación de Minimercado La Esquina</title>
+  <desc id="description">DER visual con las 18 tablas del negocio, campos principales y relaciones de uno a muchos, uno a uno y muchos a muchos resuelta mediante una tabla puente.</desc>
+  <defs><style>
+    text { font-family: Inter, Segoe UI, Arial, sans-serif; }
+    .bg { fill: #f3f0e8; }
+    .title { font-size: 36px; font-weight: 700; fill: #1b2925; }
+    .subtitle { font-size: 17px; fill: #60716a; letter-spacing: .4px; }
+    .card { fill: #fffdf8; stroke: #c9cec5; stroke-width: 1.4; }
+    .header { fill: #213c32; }
+    .entity-name { font-size: 19px; font-weight: 700; fill: #fffdf8; }
+    .fields-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; fill: #c7d8c9; }
+    .field { font-family: Consolas, Menlo, monospace; font-size: 13px; fill: #314139; }
+    .relation path { fill: none; stroke: #cf725b; stroke-width: 1.6; opacity: .58; }
+    .relation rect { fill: #fffdf8; stroke: #e4a08e; stroke-width: 1; opacity: .97; }
+    .relation text { font-size: 10px; font-weight: 700; fill: #a84d39; }
+    .legend { font-size: 13px; fill: #40534a; }
+  </style></defs>
+  <rect class="bg" width="2280" height="1740"/>
+  <text class="title" x="55" y="65">Minimercado La Esquina · Modelo entidad-relación</text>
+  <text class="subtitle" x="55" y="99">18 tablas · catálogo, abastecimiento, ventas, cobros e inventario · escenario académico simulado</text>
+  <g class="relation"><path d="M 715 534 C 760 508, 760 276, 805 302"/><rect x="736" y="375" width="48" height="20" rx="9"/><text x="760" y="389" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 293 C 760 293, 760 311, 805 311"/><rect x="736" y="285" width="48" height="20" rx="9"/><text x="760" y="299" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 802 C 760 828, 760 596, 805 570"/><rect x="736" y="695" width="48" height="20" rx="9"/><text x="760" y="709" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 311 C 760 285, 760 508, 805 534"/><rect x="736" y="379.5" width="48" height="20" rx="9"/><text x="760" y="393.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 1070 C 760 1070, 760 793, 805 793"/><rect x="736" y="914.5" width="48" height="20" rx="9"/><text x="760" y="928.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 1284 C 760 1310, 760 828, 805 802"/><rect x="736" y="1052" width="48" height="20" rx="9"/><text x="760" y="1066" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 1543 C 760 1517, 760 785, 805 811"/><rect x="736" y="1134" width="48" height="20" rx="9"/><text x="760" y="1148" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1437 910 C 1437 910, 1437 978, 1437 978"/><rect x="1413" y="927" width="48" height="20" rx="9"/><text x="1437" y="941" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 811 C 760 837, 760 1060, 805 1034"/><rect x="736" y="931.5" width="48" height="20" rx="9"/><text x="760" y="945.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 570 C 1510 544, 1510 517, 1555 543"/><rect x="1486" y="513.5" width="48" height="20" rx="9"/><text x="1510" y="527.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 784 C 1510 784, 1510 552, 1555 552"/><rect x="1486" y="651" width="48" height="20" rx="9"/><text x="1510" y="665" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 293 C 1510 319, 1510 337, 1555 311"/><rect x="1486" y="311" width="48" height="20" rx="9"/><text x="1510" y="325" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 802 C 1510 776, 1510 294, 1555 320"/><rect x="1486" y="518" width="48" height="20" rx="9"/><text x="1510" y="532" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 311 C 1510 311, 1510 1034, 1555 1034"/><rect x="1486" y="655.5" width="48" height="20" rx="9"/><text x="1510" y="669.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 1320 C 1510 1346, 1510 1069, 1555 1043"/><rect x="1486" y="1190.5" width="48" height="20" rx="9"/><text x="1510" y="1204.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 284 C 1135 258, 1135 1026, 1555 1052"/><rect x="1111" y="625" width="48" height="20" rx="9"/><text x="1135" y="639" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 793 C 1510 793, 1510 811, 1555 811"/><rect x="1486" y="785" width="48" height="20" rx="9"/><text x="1510" y="799" text-anchor="middle">1:1</text></g>
+<g class="relation"><path d="M 1465 802 C 1510 828, 1510 1346, 1555 1320"/><rect x="1486" y="1070" width="48" height="20" rx="9"/><text x="1510" y="1084" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 311 C 1135 285, 1135 1258, 1555 1284"/><rect x="1111" y="754.5" width="48" height="20" rx="9"/><text x="1135" y="768.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 570 C 1510 570, 1510 1293, 1555 1293"/><rect x="1486" y="914.5" width="48" height="20" rx="9"/><text x="1510" y="928.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 284 C 1510 310, 1510 1328, 1555 1302"/><rect x="1486" y="802" width="48" height="20" rx="9"/><text x="1510" y="816" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 1543 C 1510 1517, 1510 1285, 1555 1311"/><rect x="1486" y="1384" width="48" height="20" rx="9"/><text x="1510" y="1398" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1437 410 C 1437 410, 1437 1478, 1437 1478"/><rect x="1413" y="927" width="48" height="20" rx="9"/><text x="1437" y="941" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 715 311 C 760 337, 760 1560, 805 1534"/><rect x="736" y="931.5" width="48" height="20" rx="9"/><text x="760" y="945.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 1465 1570 C 1510 1544, 1510 1517, 1555 1543"/><rect x="1486" y="1513.5" width="48" height="20" rx="9"/><text x="1510" y="1527.5" text-anchor="middle">1:N</text></g>
+<g class="relation"><path d="M 2187 410 C 2187 410, 2187 1478, 2187 1478"/><rect x="2163" y="927" width="48" height="20" rx="9"/><text x="2187" y="941" text-anchor="middle">1:N</text></g>
+  <g class="entity">
+    <rect class="card" x="55" y="190" width="660" height="220" rx="10"/>
+    <path class="header" d="M 65 190 H 705 Q 715 190 715 200 V 242 H 55 V 200 Q 55 190 65 190 Z"/>
+    <text class="entity-name" x="77" y="225">usuarios</text>
+    <text class="fields-label" x="693" y="224" text-anchor="end">CAMPOS</text>
+    <text class="field" x="79" y="265">PK id: INT</text>
+<text class="field" x="79" y="292">nombre: VARCHAR</text>
+<text class="field" x="79" y="319">correo: VARCHAR UNIQUE</text>
+<text class="field" x="79" y="346">passwordHash: VARCHAR</text>
+<text class="field" x="79" y="373">createdAt, updatedAt: DATETIME</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="55" y="440" width="660" height="220" rx="10"/>
+    <path class="header" d="M 65 440 H 705 Q 715 440 715 450 V 492 H 55 V 450 Q 55 440 65 440 Z"/>
+    <text class="entity-name" x="77" y="475">clientes</text>
+    <text class="fields-label" x="693" y="474" text-anchor="end">CAMPOS</text>
+    <text class="field" x="79" y="515">PK id: INT</text>
+<text class="field" x="79" y="542">nombre: VARCHAR</text>
+<text class="field" x="79" y="569">correo: VARCHAR NULL</text>
+<text class="field" x="79" y="596">telefono: VARCHAR NULL</text>
+<text class="field" x="79" y="623">createdAt, updatedAt: DATETIME</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="55" y="690" width="660" height="220" rx="10"/>
+    <path class="header" d="M 65 690 H 705 Q 715 690 715 700 V 742 H 55 V 700 Q 55 690 65 690 Z"/>
+    <text class="entity-name" x="77" y="725">proveedores</text>
+    <text class="fields-label" x="693" y="724" text-anchor="end">CAMPOS</text>
+    <text class="field" x="79" y="765">PK id: INT</text>
+<text class="field" x="79" y="792">nombre: VARCHAR</text>
+<text class="field" x="79" y="819">identificacion, contacto: VARCHAR NULL</text>
+<text class="field" x="79" y="846">correo, telefono, direccion: VARCHAR NULL</text>
+<text class="field" x="79" y="873">activo: BOOLEAN</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="55" y="940" width="660" height="220" rx="10"/>
+    <path class="header" d="M 65 940 H 705 Q 715 940 715 950 V 992 H 55 V 950 Q 55 940 65 940 Z"/>
+    <text class="entity-name" x="77" y="975">categorias</text>
+    <text class="fields-label" x="693" y="974" text-anchor="end">CAMPOS</text>
+    <text class="field" x="79" y="1015">PK id: INT</text>
+<text class="field" x="79" y="1042">nombre: VARCHAR UNIQUE</text>
+<text class="field" x="79" y="1069">descripcion: VARCHAR NULL</text>
+<text class="field" x="79" y="1096">activa: BOOLEAN</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="55" y="1190" width="660" height="220" rx="10"/>
+    <path class="header" d="M 65 1190 H 705 Q 715 1190 715 1200 V 1242 H 55 V 1200 Q 55 1190 65 1190 Z"/>
+    <text class="entity-name" x="77" y="1225">marcas</text>
+    <text class="fields-label" x="693" y="1224" text-anchor="end">CAMPOS</text>
+    <text class="field" x="79" y="1265">PK id: INT</text>
+<text class="field" x="79" y="1292">nombre: VARCHAR UNIQUE</text>
+<text class="field" x="79" y="1319">descripcion: VARCHAR NULL</text>
+<text class="field" x="79" y="1346">activa: BOOLEAN</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="55" y="1440" width="660" height="220" rx="10"/>
+    <path class="header" d="M 65 1440 H 705 Q 715 1440 715 1450 V 1492 H 55 V 1450 Q 55 1440 65 1440 Z"/>
+    <text class="entity-name" x="77" y="1475">unidades_medida</text>
+    <text class="fields-label" x="693" y="1474" text-anchor="end">CAMPOS</text>
+    <text class="field" x="79" y="1515">PK id: INT</text>
+<text class="field" x="79" y="1542">nombre: VARCHAR UNIQUE</text>
+<text class="field" x="79" y="1569">abreviatura: VARCHAR UNIQUE</text>
+<text class="field" x="79" y="1596">activa: BOOLEAN</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="805" y="190" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 190 H 1455 Q 1465 190 1465 200 V 242 H 805 V 200 Q 805 190 815 190 Z"/>
+    <text class="entity-name" x="827" y="225">facturas</text>
+    <text class="fields-label" x="1443" y="224" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="265">PK id: INT</text>
+<text class="field" x="829" y="292">FK clienteId: INT</text>
+<text class="field" x="829" y="319">FK usuarioId: INT NULL</text>
+<text class="field" x="829" y="346">fecha: DATE, fechaConfirmacion: DATETIME NULL</text>
+<text class="field" x="829" y="373">estado: ENUM</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="805" y="440" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 440 H 1455 Q 1465 440 1465 450 V 492 H 805 V 450 Q 805 440 815 440 Z"/>
+    <text class="entity-name" x="827" y="475">compras</text>
+    <text class="fields-label" x="1443" y="474" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="515">PK id: INT</text>
+<text class="field" x="829" y="542">FK proveedorId, usuarioId: INT</text>
+<text class="field" x="829" y="569">fecha: DATE, fechaRecepcion: DATETIME NULL</text>
+<text class="field" x="829" y="596">estado: ENUM</text>
+<text class="field" x="829" y="623">observaciones: TEXT NULL</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="805" y="690" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 690 H 1455 Q 1465 690 1465 700 V 742 H 805 V 700 Q 805 690 815 690 Z"/>
+    <text class="entity-name" x="827" y="725">productos</text>
+    <text class="fields-label" x="1443" y="724" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="765">PK id: INT</text>
+<text class="field" x="829" y="792">nombre: VARCHAR, sku: VARCHAR UNIQUE NULL</text>
+<text class="field" x="829" y="819">codigoBarras: VARCHAR UNIQUE NULL</text>
+<text class="field" x="829" y="846">precio: DECIMAL</text>
+<text class="field" x="829" y="873">FK categoriaId, marcaId, unidadMedidaId: INT NULL</text>
+<text class="field" x="829" y="900">descripcion: TEXT NULL, activo: BOOLEAN</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="805" y="940" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 940 H 1455 Q 1465 940 1465 950 V 992 H 805 V 950 Q 805 940 815 940 Z"/>
+    <text class="entity-name" x="827" y="975">productos_proveedores</text>
+    <text class="fields-label" x="1443" y="974" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="1015">PK id: INT</text>
+<text class="field" x="829" y="1042">FK proveedorId, productoId: INT</text>
+<text class="field" x="829" y="1069">codigoProveedor: VARCHAR NULL</text>
+<text class="field" x="829" y="1096">costoUnitario: DECIMAL</text>
+<text class="field" x="829" y="1123">preferido: BOOLEAN, UNIQUE (proveedorId, productoId)</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="805" y="1190" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 1190 H 1455 Q 1465 1190 1465 1200 V 1242 H 805 V 1200 Q 805 1190 815 1190 Z"/>
+    <text class="entity-name" x="827" y="1225">metodos_pago</text>
+    <text class="fields-label" x="1443" y="1224" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="1265">PK id: INT</text>
+<text class="field" x="829" y="1292">codigo: VARCHAR UNIQUE</text>
+<text class="field" x="829" y="1319">nombre: VARCHAR UNIQUE</text>
+<text class="field" x="829" y="1346">activo: BOOLEAN</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="805" y="1440" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 1440 H 1455 Q 1465 1440 1465 1450 V 1492 H 805 V 1450 Q 805 1440 815 1440 Z"/>
+    <text class="entity-name" x="827" y="1475">devoluciones</text>
+    <text class="fields-label" x="1443" y="1474" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="1515">PK id: INT</text>
+<text class="field" x="829" y="1542">FK facturaId, usuarioId: INT</text>
+<text class="field" x="829" y="1569">fecha: DATE</text>
+<text class="field" x="829" y="1596">motivo: VARCHAR</text>
+<text class="field" x="829" y="1623">estado: ENUM</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="1555" y="190" width="660" height="220" rx="10"/>
+    <path class="header" d="M 1565 190 H 2205 Q 2215 190 2215 200 V 242 H 1555 V 200 Q 1555 190 1565 190 Z"/>
+    <text class="entity-name" x="1577" y="225">detalle_factura</text>
+    <text class="fields-label" x="2193" y="224" text-anchor="end">CAMPOS</text>
+    <text class="field" x="1579" y="265">PK id: INT</text>
+<text class="field" x="1579" y="292">FK facturaId, productoId: INT</text>
+<text class="field" x="1579" y="319">cantidad: DECIMAL</text>
+<text class="field" x="1579" y="346">precioUnitario: DECIMAL</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="1555" y="440" width="660" height="220" rx="10"/>
+    <path class="header" d="M 1565 440 H 2205 Q 2215 440 2215 450 V 492 H 1555 V 450 Q 1555 440 1565 440 Z"/>
+    <text class="entity-name" x="1577" y="475">detalles_compra</text>
+    <text class="fields-label" x="2193" y="474" text-anchor="end">CAMPOS</text>
+    <text class="field" x="1579" y="515">PK id: INT</text>
+<text class="field" x="1579" y="542">FK compraId, productoId: INT</text>
+<text class="field" x="1579" y="569">cantidad: DECIMAL</text>
+<text class="field" x="1579" y="596">costoUnitario: DECIMAL</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="1555" y="690" width="660" height="220" rx="10"/>
+    <path class="header" d="M 1565 690 H 2205 Q 2215 690 2215 700 V 742 H 1555 V 700 Q 1555 690 1565 690 Z"/>
+    <text class="entity-name" x="1577" y="725">existencias</text>
+    <text class="fields-label" x="2193" y="724" text-anchor="end">CAMPOS</text>
+    <text class="field" x="1579" y="765">PK id: INT</text>
+<text class="field" x="1579" y="792">FK productoId: INT UNIQUE</text>
+<text class="field" x="1579" y="819">cantidadActual: DECIMAL</text>
+<text class="field" x="1579" y="846">cantidadMinima: DECIMAL</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="1555" y="940" width="660" height="220" rx="10"/>
+    <path class="header" d="M 1565 940 H 2205 Q 2215 940 2215 950 V 992 H 1555 V 950 Q 1555 940 1565 940 Z"/>
+    <text class="entity-name" x="1577" y="975">pagos</text>
+    <text class="fields-label" x="2193" y="974" text-anchor="end">CAMPOS</text>
+    <text class="field" x="1579" y="1015">PK id: INT</text>
+<text class="field" x="1579" y="1042">FK facturaId, metodoPagoId, usuarioId: INT</text>
+<text class="field" x="1579" y="1069">monto: DECIMAL</text>
+<text class="field" x="1579" y="1096">fecha: DATETIME, referencia: VARCHAR NULL</text>
+<text class="field" x="1579" y="1123">estado: ENUM</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="1555" y="1190" width="660" height="220" rx="10"/>
+    <path class="header" d="M 1565 1190 H 2205 Q 2215 1190 2215 1200 V 1242 H 1555 V 1200 Q 1555 1190 1565 1190 Z"/>
+    <text class="entity-name" x="1577" y="1225">movimientos_inventario</text>
+    <text class="fields-label" x="2193" y="1224" text-anchor="end">CAMPOS</text>
+    <text class="field" x="1579" y="1265">PK id: INT</text>
+<text class="field" x="1579" y="1292">FK productoId, usuarioId: INT</text>
+<text class="field" x="1579" y="1319">FK compraId, facturaId, devolucionId: INT NULL</text>
+<text class="field" x="1579" y="1346">tipo: ENUM, cantidad: DECIMAL</text>
+<text class="field" x="1579" y="1373">nota: VARCHAR NULL</text>
+  </g>
+<g class="entity">
+    <rect class="card" x="1555" y="1440" width="660" height="220" rx="10"/>
+    <path class="header" d="M 1565 1440 H 2205 Q 2215 1440 2215 1450 V 1492 H 1555 V 1450 Q 1555 1440 1565 1440 Z"/>
+    <text class="entity-name" x="1577" y="1475">detalles_devolucion</text>
+    <text class="fields-label" x="2193" y="1474" text-anchor="end">CAMPOS</text>
+    <text class="field" x="1579" y="1515">PK id: INT</text>
+<text class="field" x="1579" y="1542">FK devolucionId, detalleFacturaId: INT</text>
+<text class="field" x="1579" y="1569">cantidad: DECIMAL</text>
+<text class="field" x="1579" y="1596">precioUnitario: DECIMAL</text>
+  </g>
+  <rect x="55" y="1680" width="2170" height="36" rx="8" fill="#e7e9e1"/>
+  <text class="legend" x="75" y="1704">PK clave primaria  ·  FK clave foránea  ·  NULL campo opcional  ·  1:N uno a muchos  ·  1:1 uno a uno  ·  N:M muchos a muchos mediante productos_proveedores</text>
+</svg>

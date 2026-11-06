@@ -1,0 +1,23 @@
+# Dependencias
+node_modules/
+package-lock.json
+
+# Entorno y credenciales (Seguridad estricta)
+.env
+*.env
+backend/.env
+frontend/.env
+
+# Caches y artefactos temporales
+.npm-cache/
+.qa/
+.taste-skill/
+dist/
+build/
+coverage/
+*.log
+.DS_Store
+
+# IDE y configuración local
+.vscode/*
+!.vscode/mcp.json

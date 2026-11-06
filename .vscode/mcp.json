@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"]
+    },
+    "magicui": {
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp@latest"]
+    },
+    "21st-dev": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic@latest"]
+    }
+  }
+}
+

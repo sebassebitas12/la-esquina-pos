@@ -1,0 +1,15 @@
+{
+  "name": "miniproyecto-la-esquina",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "db:create": "npm run db:create --workspace backend",
+    "db:migrate": "npm run db:migrate --workspace backend",
+    "smoke:clients": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File backend/scripts/smoke-clients.ps1",
+    "smoke:api": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File backend/scripts/smoke-api.ps1",
+    "smoke:domain": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File backend/scripts/smoke-domain.ps1"
+  }
+}
