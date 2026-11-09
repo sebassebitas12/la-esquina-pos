@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="2280" height="1740" viewBox="0 0 2280 1740" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="2280" height="1980" viewBox="0 0 2280 1980" role="img" aria-labelledby="title description">
   <title id="title">Diagrama entidad-relación de Minimercado La Esquina</title>
-  <desc id="description">DER visual con las 18 tablas del negocio, campos principales y relaciones de uno a muchos, uno a uno y muchos a muchos resuelta mediante una tabla puente.</desc>
+  <desc id="description">DER visual con las 19 tablas del negocio, campos principales y relaciones de uno a muchos, uno a uno y muchos a muchos resuelta mediante una tabla puente.</desc>
   <defs><style>
     text { font-family: Inter, Segoe UI, Arial, sans-serif; }
     .bg { fill: #f3f0e8; }
@@ -17,9 +17,10 @@
     .relation text { font-size: 10px; font-weight: 700; fill: #a84d39; }
     .legend { font-size: 13px; fill: #40534a; }
   </style></defs>
-  <rect class="bg" width="2280" height="1740"/>
+  <rect class="bg" width="2280" height="1980"/>
   <text class="title" x="55" y="65">Minimercado La Esquina · Modelo entidad-relación</text>
-  <text class="subtitle" x="55" y="99">18 tablas · catálogo, abastecimiento, ventas, cobros e inventario · escenario académico simulado</text>
+  <text class="subtitle" x="55" y="99">19 tablas · acceso, catálogo, abastecimiento, ventas, cobros e inventario · escenario académico simulado</text>
+<g class="relation"><path d="M 805 1795 C 755 1795, 755 300, 715 300"/><rect x="731" y="1675" width="48" height="20" rx="9"/><text x="755" y="1689" text-anchor="middle">1:N</text></g>
   <g class="relation"><path d="M 715 534 C 760 508, 760 276, 805 302"/><rect x="736" y="375" width="48" height="20" rx="9"/><text x="760" y="389" text-anchor="middle">1:N</text></g>
 <g class="relation"><path d="M 715 293 C 760 293, 760 311, 805 311"/><rect x="736" y="285" width="48" height="20" rx="9"/><text x="760" y="299" text-anchor="middle">1:N</text></g>
 <g class="relation"><path d="M 715 802 C 760 828, 760 596, 805 570"/><rect x="736" y="695" width="48" height="20" rx="9"/><text x="760" y="709" text-anchor="middle">1:N</text></g>
@@ -47,15 +48,16 @@
 <g class="relation"><path d="M 1465 1570 C 1510 1544, 1510 1517, 1555 1543"/><rect x="1486" y="1513.5" width="48" height="20" rx="9"/><text x="1510" y="1527.5" text-anchor="middle">1:N</text></g>
 <g class="relation"><path d="M 2187 410 C 2187 410, 2187 1478, 2187 1478"/><rect x="2163" y="927" width="48" height="20" rx="9"/><text x="2187" y="941" text-anchor="middle">1:N</text></g>
   <g class="entity">
-    <rect class="card" x="55" y="190" width="660" height="220" rx="10"/>
+    <rect class="card" x="55" y="190" width="660" height="245" rx="10"/>
     <path class="header" d="M 65 190 H 705 Q 715 190 715 200 V 242 H 55 V 200 Q 55 190 65 190 Z"/>
     <text class="entity-name" x="77" y="225">usuarios</text>
     <text class="fields-label" x="693" y="224" text-anchor="end">CAMPOS</text>
     <text class="field" x="79" y="265">PK id: INT</text>
 <text class="field" x="79" y="292">nombre: VARCHAR</text>
 <text class="field" x="79" y="319">correo: VARCHAR UNIQUE</text>
-<text class="field" x="79" y="346">passwordHash: VARCHAR</text>
-<text class="field" x="79" y="373">createdAt, updatedAt: DATETIME</text>
+<text class="field" x="79" y="346">contrasenaHash: VARCHAR</text>
+<text class="field" x="79" y="373">FK rolId: INT</text>
+<text class="field" x="79" y="400">createdAt, updatedAt: DATETIME</text>
   </g>
 <g class="entity">
     <rect class="card" x="55" y="440" width="660" height="220" rx="10"/>
@@ -237,6 +239,16 @@
 <text class="field" x="1579" y="1569">cantidad: DECIMAL</text>
 <text class="field" x="1579" y="1596">precioUnitario: DECIMAL</text>
   </g>
-  <rect x="55" y="1680" width="2170" height="36" rx="8" fill="#e7e9e1"/>
-  <text class="legend" x="75" y="1704">PK clave primaria  ·  FK clave foránea  ·  NULL campo opcional  ·  1:N uno a muchos  ·  1:1 uno a uno  ·  N:M muchos a muchos mediante productos_proveedores</text>
+  <g class="entity">
+    <rect class="card" x="805" y="1690" width="660" height="220" rx="10"/>
+    <path class="header" d="M 815 1690 H 1455 Q 1465 1690 1465 1700 V 1742 H 805 V 1700 Q 805 1690 815 1690 Z"/>
+    <text class="entity-name" x="827" y="1725">roles</text>
+    <text class="fields-label" x="1443" y="1724" text-anchor="end">CAMPOS</text>
+    <text class="field" x="829" y="1765">PK id: INT</text>
+    <text class="field" x="829" y="1792">nombre: VARCHAR UNIQUE</text>
+    <text class="field" x="829" y="1819">descripcion: VARCHAR</text>
+    <text class="field" x="829" y="1846">createdAt, updatedAt: DATETIME</text>
+  </g>
+  <rect x="55" y="1920" width="2170" height="36" rx="8" fill="#e7e9e1"/>
+  <text class="legend" x="75" y="1944">PK clave primaria  ·  FK clave foránea  ·  NULL campo opcional  ·  1:N uno a muchos  ·  1:1 uno a uno  ·  N:M muchos a muchos mediante productos_proveedores</text>
 </svg>

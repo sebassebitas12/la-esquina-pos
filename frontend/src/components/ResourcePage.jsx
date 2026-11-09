@@ -142,7 +142,8 @@ function RecordForm({ resource, mode, record, options, onCancel, onSave }) {
   </form>;
 }
 
-function canEdit(resource, record) {
+function canEdit(resource, record, isAdmin) {
+  if (!isAdmin) return false;
   if (resource.update === false) return false;
   if (resource.key === 'compras' || resource.key === 'facturas' || resource.key === 'devoluciones') return record.estado === 'borrador';
   if (resource.key === 'detalles-compra') return record.compra?.estado === 'borrador';
@@ -151,7 +152,8 @@ function canEdit(resource, record) {
   return true;
 }
 
-function canDelete(resource, record) {
+function canDelete(resource, record, isAdmin) {
+  if (!isAdmin) return false;
   if (resource.delete === false) return false;
   if (['compras', 'facturas', 'devoluciones'].includes(resource.key)) return record.estado === 'borrador';
   if (resource.key === 'detalles-compra') return record.compra?.estado === 'borrador';
@@ -198,7 +200,7 @@ function displayValue(item, record, resource) {
   return String(value);
 }
 
-function RecordInspector({ resource, record, mode, options, onClose, onEdit, onDelete, onSave, children }) {
+function RecordInspector({ resource, record, mode, options, isAdmin, onClose, onEdit, onDelete, onSave, children }) {
   const panelRef = useRef(null);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
@@ -234,7 +236,7 @@ function RecordInspector({ resource, record, mode, options, onClose, onEdit, onD
         <div className="detail-topline"><span>{resource.title}</span>{record.estado && <Status value={record.estado} />}</div>
         <dl className="detail-list">{resource.fields.map((item) => <div key={item.name}><dt>{item.label}</dt><dd>{displayValue(item, record, resource)}</dd></div>)}</dl>
         {Array.isArray(record.detalles) && <section className="detail-related"><h3>Líneas asociadas <span>{record.detalles.length}</span></h3>{record.detalles.length ? record.detalles.map((line) => <div className="related-line" key={line.id}><span>{line.producto?.nombre || line.detalleFactura?.producto?.nombre || `Línea #${line.id}`} <small>× {formatQuantity(line.cantidad)}</small></span><strong>{formatMoney(line.precioUnitario ?? line.costoUnitario)}</strong></div>) : <p>Este documento todavía no tiene líneas.</p>}</section>}
-        <div className="detail-actions">{canEdit(resource, record) && <button className="button button--outline" type="button" onClick={onEdit}><Icon name="edit" size={16} />Editar</button>}{canDelete(resource, record) && <button className="button button--danger-ghost" type="button" onClick={onDelete}><Icon name="trash" size={16} />{resource.deleteLabel || (resource.key === 'pagos' ? 'Anular pago' : 'Eliminar')}</button>}</div>
+        <div className="detail-actions">{canEdit(resource, record, isAdmin) && <button className="button button--outline" type="button" onClick={onEdit}><Icon name="edit" size={16} />Editar</button>}{canDelete(resource, record, isAdmin) && <button className="button button--danger-ghost" type="button" onClick={onDelete}><Icon name="trash" size={16} />{resource.deleteLabel || (resource.key === 'pagos' ? 'Anular pago' : 'Eliminar')}</button>}</div>
       </div> : children || <RecordForm key={`${resource.key}-${mode}-${record?.id || 'new'}`} resource={resource} mode={mode} record={record} options={options} onCancel={onClose} onSave={onSave} />}
     </section>
   </div>;
@@ -262,7 +264,8 @@ function ConfirmDialog({ target, busy, error, onCancel, onConfirm }) {
 export default function ResourcePage({ resourceKey, initialMode }) {
   const location = useLocation();
   const resource = resourcesByKey[resourceKey];
-  const { token, logout } = useAuth();
+  const { token, usuario, logout } = useAuth();
+  const isAdmin = usuario?.rol === 'administrador';
   const api = useMemo(() => createApiClient(token, logout), [token, logout]);
   const [records, setRecords] = useState([]);
   const [options, setOptions] = useState({});
@@ -304,8 +307,8 @@ export default function ResourcePage({ resourceKey, initialMode }) {
     setConfirmError('');
   }, [location.pathname, resourceKey]);
   useEffect(() => {
-    if (initialMode === 'create') setPanel({ mode: 'create', record: null });
-  }, [initialMode]);
+    if (initialMode === 'create' && isAdmin) setPanel({ mode: 'create', record: null });
+  }, [initialMode, isAdmin]);
 
   const visibleRecords = useMemo(() => records.filter((record) => {
     const matchesQuery = !query.trim() || resource.search(record).toLowerCase().includes(query.trim().toLowerCase());
@@ -318,6 +321,7 @@ export default function ResourcePage({ resourceKey, initialMode }) {
   }
 
   async function saveRecord(payload) {
+    if (!isAdmin) throw new Error('Tu rol de lector solo permite consultar información.');
     if (panel.mode === 'edit') await api[resourceKey].actualizar(panel.record.id, payload);
     else await api[resourceKey].crear(payload);
     setPanel(null);
@@ -326,6 +330,10 @@ export default function ResourcePage({ resourceKey, initialMode }) {
   }
 
   async function executeConfirmed() {
+    if (!isAdmin) {
+      setConfirmError('Tu rol de lector solo permite consultar información.');
+      return;
+    }
     setBusy(true);
     setConfirmError('');
     try {
@@ -350,9 +358,9 @@ export default function ResourcePage({ resourceKey, initialMode }) {
   function rowActions(record) {
     return <div className="row-actions">
       <button className="row-action" type="button" onClick={() => openPanel('view', record)}><Icon name="eye" size={15} />Ver</button>
-      {canEdit(resource, record) && <button className="row-action" type="button" onClick={() => openPanel('edit', record)}><Icon name="edit" size={15} />Editar</button>}
-      {canDelete(resource, record) && <button className="row-action row-action--danger" type="button" onClick={() => askAction('delete', record)}><Icon name="trash" size={15} />{resource.deleteLabel || (resource.key === 'pagos' ? 'Anular pago' : 'Eliminar')}</button>}
-      {resource.actions?.map((action) => {
+      {canEdit(resource, record, isAdmin) && <button className="row-action" type="button" onClick={() => openPanel('edit', record)}><Icon name="edit" size={15} />Editar</button>}
+      {canDelete(resource, record, isAdmin) && <button className="row-action row-action--danger" type="button" onClick={() => askAction('delete', record)}><Icon name="trash" size={15} />{resource.deleteLabel || (resource.key === 'pagos' ? 'Anular pago' : 'Eliminar')}</button>}
+      {isAdmin && resource.actions?.map((action) => {
         const allowed = action === 'recibir' ? record.estado === 'borrador' : action === 'confirmar' ? record.estado === 'borrador' : action === 'procesar' ? record.estado === 'borrador' : action === 'anular' && (resource.key === 'compras' ? record.estado === 'borrador' : record.estado === 'confirmada');
         if (!allowed) return null;
         const kind = action === 'recibir' ? 'recibir' : action === 'confirmar' ? 'confirmar' : action === 'procesar' ? 'procesar' : 'anular';
@@ -364,7 +372,7 @@ export default function ResourcePage({ resourceKey, initialMode }) {
   return <main className="page-content resource-page">
     <div className="resource-heading">
       <div><p className="eyebrow">{resource.group}</p><h1>{resource.title}</h1><p className="page-subtitle">{resource.description}</p></div>
-      {resource.create !== false && <button className="button button--primary create-button" type="button" aria-label={`Crear ${resource.singular}`} onClick={() => openPanel('create')}><Icon name="plus" size={17} /><span>Crear <span className="create-button-full">{resource.singular}</span></span></button>}
+      {isAdmin && resource.create !== false && <button className="button button--primary create-button" type="button" aria-label={`Crear ${resource.singular}`} onClick={() => openPanel('create')}><Icon name="plus" size={17} /><span>Crear <span className="create-button-full">{resource.singular}</span></span></button>}
     </div>
 
     <ModuleTabs resource={resource} />
@@ -383,7 +391,7 @@ export default function ResourcePage({ resourceKey, initialMode }) {
       <div><h2>{records.length === 0 ? `Todavía no hay ${resource.title.toLowerCase()}.` : 'No hay coincidencias.'}</h2><p>{records.length === 0 ? resource.emptyDescription || `Creá el primer registro para empezar a trabajar con ${resource.title.toLowerCase()}.` : 'Probá otra búsqueda o quitá el filtro actual.'}</p>
         {records.length === 0 && resource.emptyLinks?.length > 0 && <div className="empty-links">{resource.emptyLinks.map((item) => <Link className="button button--quiet" key={item.to} to={item.to}>{item.label}<Icon name="arrow" size={15} /></Link>)}</div>}
       </div>
-      {records.length === 0 && resource.create !== false && <button className="button button--outline" type="button" onClick={() => openPanel('create')}>Crear {resource.singular}<Icon name="arrow" size={16} /></button>}
+      {isAdmin && records.length === 0 && resource.create !== false && <button className="button button--outline" type="button" onClick={() => openPanel('create')}>Crear {resource.singular}<Icon name="arrow" size={16} /></button>}
     </div>}
     {listState === 'ready' && visibleRecords.length > 0 && <>
       <div className="records-table-wrap"><table className="records-table"><caption className="visually-hidden">Registros de {resource.title}</caption>
@@ -397,7 +405,7 @@ export default function ResourcePage({ resourceKey, initialMode }) {
       </li>)}</ul>
     </>}
 
-    {panel && <RecordInspector resource={resource} record={panel.record} mode={panel.mode} options={options} onClose={() => setPanel(null)} onEdit={() => openPanel('edit', panel.record)} onDelete={() => askAction('delete', panel.record)} onSave={saveRecord}>
+    {panel && <RecordInspector resource={resource} record={panel.record} mode={panel.mode} options={options} isAdmin={isAdmin} onClose={() => setPanel(null)} onEdit={() => openPanel('edit', panel.record)} onDelete={() => askAction('delete', panel.record)} onSave={saveRecord}>
       {panel.mode !== 'view' && <RecordForm key={`${resource.key}-${panel.mode}-${panel.record?.id || 'new'}`} resource={resource} mode={panel.mode} record={panel.record} options={options} onCancel={() => setPanel(null)} onSave={saveRecord} />}
     </RecordInspector>}
     <ConfirmDialog target={confirm} busy={busy} error={confirmError} onCancel={() => { if (!busy) setConfirm(null); }} onConfirm={executeConfirmed} />

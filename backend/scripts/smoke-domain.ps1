@@ -37,8 +37,10 @@ function Get-Data([string]$Path) {
 }
 
 try {
-    $null = Assert-Status POST "$BaseUrl/auth/register" 201 @{ nombre = "Prueba dominio $runId"; correo = $userEmail; password = $userPassword }
-    $session = Assert-Status POST "$BaseUrl/auth/login" 200 @{ correo = $userEmail; password = $userPassword }
+    $null = Assert-Status POST "$BaseUrl/autenticacion/registro" 201 @{ nombre = "Prueba dominio $runId"; correo = $userEmail; contrasena = $userPassword }
+    & node (Join-Path $PSScriptRoot 'asignar-rol.js') "--correo=$userEmail" '--rol=administrador'
+    if ($LASTEXITCODE -ne 0) { throw 'Could not promote temporary account to administrator for domain verification.' }
+    $session = Assert-Status POST "$BaseUrl/autenticacion/iniciar-sesion" 200 @{ correo = $userEmail; contrasena = $userPassword }
     $script:AccessToken = ($session.Content | ConvertFrom-Json).token
     if ([string]::IsNullOrWhiteSpace($script:AccessToken)) { throw 'Login did not return an access token.' }
 

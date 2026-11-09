@@ -8,6 +8,7 @@ const Producto = require('./producto')(sequelize, DataTypes);
 const Factura = require('./factura')(sequelize, DataTypes);
 const DetalleFactura = require('./detalle-factura')(sequelize, DataTypes);
 const Usuario = require('./usuario')(sequelize, DataTypes);
+const Rol = require('./rol')(sequelize, DataTypes);
 const Categoria = require('./categoria')(sequelize, DataTypes);
 const Marca = require('./marca')(sequelize, DataTypes);
 const UnidadMedida = require('./unidad-medida')(sequelize, DataTypes);
@@ -24,6 +25,8 @@ const DetalleDevolucion = require('./detalle-devolucion')(sequelize, DataTypes);
 
 Categoria.hasMany(Producto, { foreignKey: 'categoriaId', as: 'productos' });
 Producto.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'categoria' });
+Rol.hasMany(Usuario, { foreignKey: 'rolId', as: 'usuarios' });
+Usuario.belongsTo(Rol, { foreignKey: 'rolId', as: 'rol' });
 Marca.hasMany(Producto, { foreignKey: 'marcaId', as: 'productos' });
 Producto.belongsTo(Marca, { foreignKey: 'marcaId', as: 'marca' });
 UnidadMedida.hasMany(Producto, { foreignKey: 'unidadMedidaId', as: 'productos' });
@@ -90,6 +93,7 @@ module.exports = {
   Factura,
   DetalleFactura,
   Usuario,
+  Rol,
   Categoria,
   Marca,
   UnidadMedida,

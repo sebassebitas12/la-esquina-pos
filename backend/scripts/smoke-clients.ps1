@@ -31,8 +31,10 @@ function Assert-Status([string]$Method, [string]$Uri, [int]$Expected, $Body = $n
 }
 
 try {
-    $null = Assert-Status -Method POST -Uri "$BaseUrl/auth/register" -Expected 201 -Body @{ nombre = 'Usuario temporal'; correo = $authEmail; password = $authPassword }
-    $session = Assert-Status -Method POST -Uri "$BaseUrl/auth/login" -Expected 200 -Body @{ correo = $authEmail; password = $authPassword }
+    $null = Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/registro" -Expected 201 -Body @{ nombre = 'Usuario temporal'; correo = $authEmail; contrasena = $authPassword }
+    & node (Join-Path $PSScriptRoot 'asignar-rol.js') "--correo=$authEmail" '--rol=administrador'
+    if ($LASTEXITCODE -ne 0) { throw 'Could not promote temporary account to administrator for CRUD verification.' }
+    $session = Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/iniciar-sesion" -Expected 200 -Body @{ correo = $authEmail; contrasena = $authPassword }
     $script:AccessToken = ($session.Content | ConvertFrom-Json).token
     if ([string]::IsNullOrWhiteSpace($script:AccessToken)) { throw 'Login did not return an access token.' }
 

@@ -6,7 +6,7 @@
 
 ## Modelo de datos
 
-El diseño está compuesto por 18 tablas: `usuarios`, `clientes`, `categorias`, `marcas`, `unidades_medida`, `productos`, `proveedores`, `productos_proveedores`, `compras`, `detalles_compra`, `facturas`, `detalle_factura`, `metodos_pago`, `pagos`, `existencias`, `movimientos_inventario`, `devoluciones` y `detalles_devolucion`.
+El diseño está compuesto por 19 tablas: `usuarios`, `roles`, `clientes`, `categorias`, `marcas`, `unidades_medida`, `productos`, `proveedores`, `productos_proveedores`, `compras`, `detalles_compra`, `facturas`, `detalle_factura`, `metodos_pago`, `pagos`, `existencias`, `movimientos_inventario`, `devoluciones` y `detalles_devolucion`.
 
 Las relaciones principales responden a necesidades del negocio:
 
@@ -17,6 +17,7 @@ Las relaciones principales responden a necesidades del negocio:
 - Una factura puede recibir pagos parciales por diferentes métodos.
 - Cada producto tiene una fila de existencia actual y un historial de movimientos.
 - Una devolución referencia una factura y sus líneas apuntan a los detalles de venta originales.
+- Un rol agrupa usuarios con el mismo nivel de acceso; cada usuario tiene un rol y un rol puede asignarse a muchos usuarios.
 - El usuario autenticado queda asociado como responsable de operaciones de compra, cobro, inventario y devolución.
 
 El diagrama entidad-relación visual muestra las claves primarias y foráneas junto con las cardinalidades. El detalle de campos y restricciones está en [modelo-negocio-backend.md](modelo-negocio-backend.md).
@@ -29,4 +30,4 @@ Las operaciones que cambian varias filas de inventario se ejecutan dentro de tra
 
 ## Alcance académico
 
-El proyecto aplica claves primarias y foráneas, restricciones, relaciones 1:N, 1:1 y N:M, consultas con asociaciones de Sequelize, validación en Express, autenticación JWT, operaciones CRUD y migraciones versionadas. No incluye roles, permisos, datos de demostración precargados ni multi-sucursal. La interfaz se trabajará después de terminar la revisión del backend.
+El proyecto aplica claves primarias y foráneas, restricciones, relaciones 1:N, 1:1 y N:M, consultas con asociaciones de Sequelize, validación en Express, autenticación JWT, roles, permisos por método HTTP, operaciones CRUD y migraciones versionadas. No incluye datos de demostración precargados ni multi-sucursal.

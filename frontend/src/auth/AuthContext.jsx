@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { authApi } from '../api/client.js';
 
 const AuthContext = createContext(null);
@@ -28,6 +28,31 @@ function persistSession(session) {
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(readSession);
+  const [isSessionReady, setIsSessionReady] = useState(() => !session);
+  const token = session?.token;
+
+  useEffect(() => {
+    if (!token) {
+      setIsSessionReady(true);
+      return undefined;
+    }
+
+    let cancelled = false;
+    authApi.obtenerSesion(token).then((result) => {
+      if (cancelled) return;
+      const refreshedSession = { token, usuario: result.data };
+      persistSession(refreshedSession);
+      setSession(refreshedSession);
+    }).catch((error) => {
+      if (cancelled || error.status !== 401) return;
+      persistSession(null);
+      setSession(null);
+    }).finally(() => {
+      if (!cancelled) setIsSessionReady(true);
+    });
+
+    return () => { cancelled = true; };
+  }, [token]);
 
   const login = useCallback(async (credentials) => {
     const result = await authApi.iniciarSesion(credentials);
@@ -47,10 +72,11 @@ export function AuthProvider({ children }) {
     token: session?.token || null,
     usuario: session?.usuario || null,
     isAuthenticated: Boolean(session?.token),
+    isSessionReady,
     login,
     register,
     logout
-  }), [session, login, register, logout]);
+  }), [session, isSessionReady, login, register, logout]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
