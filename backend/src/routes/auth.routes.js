@@ -4,8 +4,8 @@ const autenticar = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
-router.post('/register', controller.registrar);
-router.post('/login', controller.iniciarSesion);
-router.get('/me', autenticar, controller.obtenerSesion);
+router.post('/registro', controller.registrar);
+router.post('/iniciar-sesion', controller.iniciarSesion);
+router.get('/sesion', autenticar, controller.obtenerSesion);
 
 module.exports = router;

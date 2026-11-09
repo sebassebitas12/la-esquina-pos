@@ -11,9 +11,10 @@ import { LoginPage, RegisterPage } from './pages/AuthPages.jsx';
 import { moduleNavigation, resourcesByKey } from './data/resources.js';
 
 function RequireAuth() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isSessionReady } = useAuth();
   const location = useLocation();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace state={{ from: location }} />;
+  if (!isSessionReady) return <main className="session-loading"><span className="loading-mark" /><p>Verificando tu sesión…</p></main>;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/iniciar-sesion" replace state={{ from: location }} />;
 }
 
 function AppShell() {
@@ -39,7 +40,7 @@ function AppShell() {
         <div className="topbar-right">
           <div className="topbar-search"><CommandSearch /></div>
           <div className="topbar-tools">
-            <span className="account-chip" title={usuario?.nombre}>{usuario?.nombre || 'Cuenta'}</span>
+            <span className="account-chip" title={`${usuario?.nombre || 'Cuenta'} · ${usuario?.rol || 'sin rol'}`}>{usuario?.nombre || 'Cuenta'}<small>{usuario?.rol === 'administrador' ? 'Administrador' : 'Lector'}</small></span>
             <button className="logout-button" type="button" onClick={logout} aria-label="Cerrar sesión" title="Cerrar sesión"><Icon name="logout" size={17} /><span>Salir</span></button>
           </div>
         </div>
@@ -55,19 +56,24 @@ function App() {
   return <BrowserRouter>
     <AuthProvider>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/iniciar-sesion" element={<LoginPage />} />
         <Route path="/registro" element={<RegisterPage />} />
         <Route element={<RequireAuth />}>
           <Route element={<AppShell />}>
             <Route index element={<OperationsPage />} />
             {Object.values(resourcesByKey).map((resource) => <Route key={resource.key} path={resource.route} element={<ResourcePage resourceKey={resource.key} />} />)}
-            <Route path="caja" element={<ResourcePage resourceKey="facturas" initialMode="create" />} />
+            <Route path="caja" element={<CajaRoute />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AuthProvider>
   </BrowserRouter>;
+}
+
+function CajaRoute() {
+  const { usuario } = useAuth();
+  return <ResourcePage resourceKey="facturas" initialMode={usuario?.rol === 'administrador' ? 'create' : undefined} />;
 }
 
 export default App;

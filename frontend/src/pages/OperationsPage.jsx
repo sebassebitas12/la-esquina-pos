@@ -77,7 +77,8 @@ function amountInCents(value) {
 }
 
 export default function OperationsPage() {
-  const { token, logout } = useAuth();
+  const { token, usuario, logout } = useAuth();
+  const isAdmin = usuario?.rol === 'administrador';
   const api = useMemo(() => createApiClient(token, logout), [token, logout]);
   const [data, setData] = useState({ invoices: [], purchases: [], returns: [], stock: [], movements: [], products: [], clients: [], paymentMethods: [] });
   const [state, setState] = useState('loading');
@@ -137,13 +138,13 @@ export default function OperationsPage() {
     <section className="control-center" aria-labelledby="control-center-title">
       <div className="control-center-main">
         <div className="control-center-copy">
-          <p className="eyebrow">Centro de Control</p>
-          <h1 id="control-center-title">Consola de Administración <span>· La Esquina</span></h1>
-          <p>Revisá la tienda y abrí una venta desde aquí.</p>
+          <p className="eyebrow">{isAdmin ? 'Centro de Control' : 'Consulta operativa'}</p>
+          <h1 id="control-center-title">{isAdmin ? <>Consola de Administración <span>· La Esquina</span></> : <>Operación de <span>La Esquina</span></>}</h1>
+          <p>{isAdmin ? 'Revisá la tienda y abrí una venta desde aquí.' : 'Tu rol de lector permite consultar ventas, compras e inventario.'}</p>
         </div>
-        <Link className="button button--primary control-center-action" to="/caja"><Icon name="sparkles" size={17} />Cobro Rápido / Nueva Venta<Icon name="arrow" size={17} /></Link>
+        {isAdmin && <Link className="button button--primary control-center-action" to="/caja"><Icon name="sparkles" size={17} />Cobro Rápido / Nueva Venta<Icon name="arrow" size={17} /></Link>}
       </div>
-      {state === 'ready' && data.products.length === 0 && <section className="onboarding-guide" aria-labelledby="onboarding-title">
+      {isAdmin && state === 'ready' && data.products.length === 0 && <section className="onboarding-guide" aria-labelledby="onboarding-title">
         <div className="onboarding-heading"><div><p className="eyebrow">Primera configuración</p><h2 id="onboarding-title">Guía de Inicio Rápido</h2></div><p>Seguí estos pasos para empezar a registrar ventas.</p></div>
         <ol className="onboarding-steps">
           <li><span className="onboarding-step-number">1</span><div><h3>Categorías y Unidades</h3><p>Organizá los productos y sus medidas.</p></div><Link className="button button--quiet" to="/catalogo/categorias">Configurar</Link></li>
@@ -202,14 +203,14 @@ export default function OperationsPage() {
           <div className="empty-actions">
             {data.products.length === 0 && <Link className="button button--quiet" to="/catalogo/categorias">Crear categoría</Link>}
             {data.products.length === 0 && <Link className="button button--quiet" to="/catalogo/unidades-medida">Crear unidad</Link>}
-            <Link className="button button--primary" to={data.products.length === 0 ? '/catalogo/productos' : '/ventas/facturas'}>{data.products.length === 0 ? 'Crear producto' : 'Iniciar una venta'}<Icon name="arrow" size={16} /></Link>
-            {data.clients.length === 0 && <Link className="empty-secondary-link" to="/clientes">Registrar cliente</Link>}
+            {isAdmin && <Link className="button button--primary" to={data.products.length === 0 ? '/catalogo/productos' : '/ventas/facturas'}>{data.products.length === 0 ? 'Crear producto' : 'Iniciar una venta'}<Icon name="arrow" size={16} /></Link>}
+            {isAdmin && data.clients.length === 0 && <Link className="empty-secondary-link" to="/clientes">Registrar cliente</Link>}
           </div>
         </div>}
         {state === 'ready' && queue.length > 12 && <p className="queue-overflow">Se muestran 12 pendientes. Abrí cada módulo para ver el resto.</p>}
       </section>
 
-      <aside className="quick-panel" aria-labelledby="quick-title">
+      {isAdmin && <aside className="quick-panel" aria-labelledby="quick-title">
         <h2 id="quick-title">Crear un registro</h2>
         <div className="quick-links">
           <Link to="/ventas/facturas"><span><strong>Iniciar una venta</strong><small>Crear una factura</small></span><Icon name="arrow" size={17} /></Link>
@@ -217,7 +218,7 @@ export default function OperationsPage() {
           <Link to="/catalogo/productos"><span><strong>Agregar un producto</strong><small>Incorporar al catálogo</small></span><Icon name="arrow" size={17} /></Link>
           <Link to="/clientes"><span><strong>Registrar un cliente</strong><small>Vincular una persona con ventas</small></span><Icon name="arrow" size={17} /></Link>
         </div>
-      </aside>
+      </aside>}
     </div>
 
     <section className="movement-section" aria-labelledby="movement-title">

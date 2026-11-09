@@ -44,7 +44,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [correo, setCorreo] = useState(location.state?.correo || '');
-  const [password, setPassword] = useState('');
+  const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -55,7 +55,7 @@ export function LoginPage() {
     setBusy(true);
     setError('');
     try {
-      await login({ correo, password });
+      await login({ correo, contrasena });
       navigate(location.state?.from?.pathname || '/', { replace: true });
     } catch (requestError) {
       setError(requestError.message);
@@ -93,11 +93,11 @@ export function LoginPage() {
           maxLength={254}
         />
         <AuthField
-          id="password"
+          id="contrasena"
           label="Contraseña"
           type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          value={contrasena}
+          onChange={(event) => setContrasena(event.target.value)}
           autoComplete="current-password"
           maxLength={72}
         />
@@ -121,7 +121,7 @@ export function RegisterPage() {
   const navigate = useNavigate();
   const [nombre, setNombre] = useState('');
   const [correo, setCorreo] = useState('');
-  const [password, setPassword] = useState('');
+  const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -132,8 +132,8 @@ export function RegisterPage() {
     setBusy(true);
     setError('');
     try {
-      await register({ nombre, correo, password });
-      navigate('/login', { replace: true, state: { correo, registrationComplete: true } });
+      await register({ nombre, correo, contrasena });
+      navigate('/iniciar-sesion', { replace: true, state: { correo, registrationComplete: true } });
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -144,11 +144,11 @@ export function RegisterPage() {
   return (
     <AuthFrame
       title="Crear cuenta"
-      description="Registrá el acceso que vas a usar en el minimercado."
+      description="Las cuentas nuevas quedan en modo lector: pueden consultar, pero no modificar información."
       footer={
         <>
           ¿Ya tenés cuenta?{' '}
-          <Link to="/login">
+          <Link to="/iniciar-sesion">
             Iniciar sesión <Icon name="arrow" size={14} />
           </Link>
         </>
@@ -173,11 +173,11 @@ export function RegisterPage() {
           maxLength={254}
         />
         <AuthField
-          id="password"
+          id="contrasena"
           label="Contraseña"
           type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          value={contrasena}
+          onChange={(event) => setContrasena(event.target.value)}
           autoComplete="new-password"
           minLength={8}
           maxLength={72}

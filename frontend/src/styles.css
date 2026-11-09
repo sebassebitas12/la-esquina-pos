@@ -71,7 +71,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .command-trigger > span { flex: 1; font-size: 12px; }
 .command-trigger kbd, .command-input-wrap kbd { padding: 4px 7px; border-radius: 7px; background: rgb(255 255 255 / 7%); color: #c2c2bd; font-family: inherit; font-size: 10px; }
 .topbar-tools { display: flex; flex: none; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; }
-.account-chip { max-width: 145px; overflow: hidden; color: #d4d2ca; text-overflow: ellipsis; white-space: nowrap; }
+.account-chip { max-width: 145px; display: grid; gap: 2px; overflow: hidden; color: #d4d2ca; text-overflow: ellipsis; white-space: nowrap; }
+.account-chip small { overflow: hidden; color: var(--subtle); font-size: 9px; letter-spacing: .05em; text-overflow: ellipsis; text-transform: uppercase; }
+.session-loading { min-height: 100svh; display: grid; place-content: center; justify-items: center; gap: 12px; color: var(--muted); font-size: 13px; }
+.session-loading p { margin: 0; }
 .logout-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 11px; background: transparent; color: var(--muted); cursor: pointer; }
 .logout-button { min-height: 44px; padding: 0 10px; font-size: 12px; }
 .logout-button:hover { background: var(--control); color: var(--ink); }

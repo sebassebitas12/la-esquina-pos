@@ -1,12 +1,13 @@
 # Modelo de negocio del backend
 
-El escenario representa un minimercado con un solo local. La API identifica a la persona autenticada que registra las operaciones. El alcance suma 18 tablas relacionadas; no incorpora roles, permisos ni registros precargados.
+El escenario representa un minimercado con un solo local. La API identifica a la persona autenticada que registra las operaciones. El alcance suma 19 tablas relacionadas, incluidas las tablas `usuarios` y `roles`; el registro crea cuentas con rol lector. No se precargan cuentas de administración ni registros de negocio.
 
 ## Entidades y propósito
 
 | Tabla | Datos principales | Uso |
 |---|---|---|
 | `usuarios` | nombre, correo, hash de contraseña | Registro e inicio de sesión; responsable de operaciones. |
+| `roles` | nombre, descripción | Roles `administrador` y `lector`; un rol se puede asignar a muchos usuarios. |
 | `clientes` | nombre, correo, teléfono | Personas a quienes se les emiten facturas. |
 | `categorias` | nombre, descripción, estado | Clasificación de productos. |
 | `marcas` | nombre, descripción, estado | Marca comercial opcional del producto. |
@@ -69,6 +70,7 @@ El escenario representa un minimercado con un solo local. La API identifica a la
 - `existencias` se consulta y se permite ajustar su mínimo; el saldo no se cambia directamente por CRUD. Se actualiza mediante recepción, venta, devolución o un movimiento manual.
 - `movimientos_inventario` es un historial inmutable por API. `PUT`, `PATCH` y `DELETE` responden conflicto; para corregir un dato operativo se registra un nuevo ajuste.
 - `usuarios` se gestiona mediante registro, login y consulta de sesión, no mediante un CRUD genérico que permita exponer o reemplazar hashes de contraseñas.
+- `roles` no tiene un CRUD público. El registro asigna `lector`; la promoción a administrador se ejecuta localmente con el comando descrito en [investigacion-jwt-dia-2.md](investigacion-jwt-dia-2.md).
 - `productos_proveedores` tiene CRUD, aunque sus relaciones se protegen contra duplicación y referencias inexistentes.
 
 Las restricciones de borrado dependen de las asociaciones. Un registro de catálogo no se elimina si dejaría referencias rotas. Los errores de validación responden `400`, las referencias inexistentes `404` y los conflictos de estado o relación `409`.

@@ -34,8 +34,9 @@ async function request(path, { method = 'GET', body, token, onUnauthorized } = {
 }
 
 export const authApi = {
-  registrar: (payload) => request('/auth/register', { method: 'POST', body: payload }),
-  iniciarSesion: (payload) => request('/auth/login', { method: 'POST', body: payload })
+  registrar: (payload) => request('/autenticacion/registro', { method: 'POST', body: payload }),
+  iniciarSesion: (payload) => request('/autenticacion/iniciar-sesion', { method: 'POST', body: payload }),
+  obtenerSesion: (token, onUnauthorized) => request('/autenticacion/sesion', { token, onUnauthorized })
 };
 
 function resourceApi(path, send) {
@@ -69,7 +70,7 @@ export function createApiClient(token, onUnauthorized) {
   };
 
   return {
-    auth: { me: () => send('/auth/me') },
+    auth: { obtenerSesion: () => send('/autenticacion/sesion') },
     ai: { consulta: (pregunta) => send('/ai/consulta', { method: 'POST', body: { pregunta } }) },
     ...Object.fromEntries(Object.entries(endpoints).map(([key, path]) => [key, resourceApi(path, send)]))
   };

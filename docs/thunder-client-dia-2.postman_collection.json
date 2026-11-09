@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "a1e9b277-c906-4aa8-8a37-377243cf2402",
-    "name": "Minimercado La Esquina - API de 18 tablas",
-    "description": "Colección académica para Postman o Thunder Client. Requiere iniciar sesión, guardar el token y completar las variables de IDs con las respuestas. No contiene credenciales reales ni datos de negocio precargados.",
+    "name": "Minimercado La Esquina - API de 19 tablas",
+    "description": "Colección académica para Postman o Thunder Client. El registro crea un usuario lector. Para probar escrituras, promovelo con el comando usuario:asignar-rol descrito en docs/investigacion-jwt-dia-2.md y luego iniciá sesión para guardar el token administrador.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -32,7 +32,7 @@
       "type": "string"
     },
     {
-      "key": "testPassword",
+      "key": "testContrasena",
       "value": "Clase-ORM-2026!Aa",
       "type": "string"
     },
@@ -171,7 +171,7 @@
           "name": "POST registro",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/auth/register",
+            "url": "{{baseUrl}}/autenticacion/registro",
             "description": "Esperado: HTTP 201.",
             "header": [
               {
@@ -181,7 +181,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Usuario de prueba\",\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "raw": "{\n  \"nombre\": \"Usuario de prueba\",\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"contrasena\": \"{{testContrasena}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -208,7 +208,7 @@
           "name": "POST correo duplicado",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/auth/register",
+            "url": "{{baseUrl}}/autenticacion/registro",
             "description": "Esperado: HTTP 400.",
             "header": [
               {
@@ -218,7 +218,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Usuario duplicado\",\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "raw": "{\n  \"nombre\": \"Usuario duplicado\",\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"contrasena\": \"{{testContrasena}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -242,10 +242,10 @@
           ]
         },
         {
-          "name": "POST login con contrase?a incorrecta",
+          "name": "POST inicio de sesión con contraseña incorrecta",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/auth/login",
+            "url": "{{baseUrl}}/autenticacion/iniciar-sesion",
             "description": "Esperado: HTTP 401.",
             "header": [
               {
@@ -255,7 +255,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"incorrecta\"\n}",
+              "raw": "{\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"contrasena\": \"incorrecta\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -279,10 +279,10 @@
           ]
         },
         {
-          "name": "POST login",
+          "name": "POST inicio de sesión",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/auth/login",
+            "url": "{{baseUrl}}/autenticacion/iniciar-sesion",
             "description": "Esperado: HTTP 200.",
             "header": [
               {
@@ -292,7 +292,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "raw": "{\n  \"correo\": \"usuario.{{runSuffix}}@example.test\",\n  \"contrasena\": \"{{testContrasena}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -317,10 +317,10 @@
           ]
         },
         {
-          "name": "GET /me con token",
+          "name": "GET sesión con token",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/auth/me",
+            "url": "{{baseUrl}}/autenticacion/sesion",
             "description": "Esperado: HTTP 200."
           },
           "event": [
@@ -336,10 +336,10 @@
           ]
         },
         {
-          "name": "GET /me sin token",
+          "name": "GET sesión sin token",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/auth/me",
+            "url": "{{baseUrl}}/autenticacion/sesion",
             "description": "Esperado: HTTP 401.",
             "auth": {
               "type": "noauth"

@@ -19,12 +19,13 @@ const devolucionesRoutes = require('./routes/devoluciones.routes');
 const detallesDevolucionRoutes = require('./routes/detalles-devolucion.routes');
 const aiRoutes = require('./routes/ai.routes');
 const autenticar = require('./middlewares/auth.middleware');
+const autorizarPorMetodo = require('./middlewares/autorizar.middleware');
 
 const app = express();
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  const allowedOrigins = new Set(['http://localhost:5174', 'http://127.0.0.1:5174']);
+  const allowedOrigins = new Set(['http://localhost:5175', 'http://127.0.0.1:5175']);
   if (allowedOrigins.has(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
@@ -37,24 +38,29 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: '32kb' }));
 app.get('/api/health', (_req, res) => res.status(200).json({ status: 'ok' }));
-app.use('/api/auth', authRoutes);
-app.use('/api/clientes', autenticar, clientesRoutes);
-app.use('/api/productos', autenticar, productosRoutes);
-app.use('/api/facturas', autenticar, facturasRoutes);
-app.use('/api/detalles-factura', autenticar, detallesFacturaRoutes);
-app.use('/api/categorias', autenticar, categoriasRoutes);
-app.use('/api/marcas', autenticar, marcasRoutes);
-app.use('/api/unidades-medida', autenticar, unidadesMedidaRoutes);
-app.use('/api/proveedores', autenticar, proveedoresRoutes);
-app.use('/api/productos-proveedores', autenticar, productosProveedoresRoutes);
-app.use('/api/compras', autenticar, comprasRoutes);
-app.use('/api/detalles-compra', autenticar, detallesCompraRoutes);
-app.use('/api/metodos-pago', autenticar, metodosPagoRoutes);
-app.use('/api/pagos', autenticar, pagosRoutes);
-app.use('/api/existencias', autenticar, existenciasRoutes);
-app.use('/api/movimientos-inventario', autenticar, movimientosInventarioRoutes);
-app.use('/api/devoluciones', autenticar, devolucionesRoutes);
-app.use('/api/detalles-devolucion', autenticar, detallesDevolucionRoutes);
+app.use('/api/autenticacion', authRoutes);
+
+function montarRecursoPrivado(ruta, router) {
+  app.use(`/api/${ruta}`, autenticar, autorizarPorMetodo, router);
+}
+
+montarRecursoPrivado('clientes', clientesRoutes);
+montarRecursoPrivado('productos', productosRoutes);
+montarRecursoPrivado('facturas', facturasRoutes);
+montarRecursoPrivado('detalles-factura', detallesFacturaRoutes);
+montarRecursoPrivado('categorias', categoriasRoutes);
+montarRecursoPrivado('marcas', marcasRoutes);
+montarRecursoPrivado('unidades-medida', unidadesMedidaRoutes);
+montarRecursoPrivado('proveedores', proveedoresRoutes);
+montarRecursoPrivado('productos-proveedores', productosProveedoresRoutes);
+montarRecursoPrivado('compras', comprasRoutes);
+montarRecursoPrivado('detalles-compra', detallesCompraRoutes);
+montarRecursoPrivado('metodos-pago', metodosPagoRoutes);
+montarRecursoPrivado('pagos', pagosRoutes);
+montarRecursoPrivado('existencias', existenciasRoutes);
+montarRecursoPrivado('movimientos-inventario', movimientosInventarioRoutes);
+montarRecursoPrivado('devoluciones', devolucionesRoutes);
+montarRecursoPrivado('detalles-devolucion', detallesDevolucionRoutes);
 app.use('/api/ai', autenticar, aiRoutes);
 
 app.use((_req, res) => res.status(404).json({ error: 'La ruta solicitada no existe.' }));

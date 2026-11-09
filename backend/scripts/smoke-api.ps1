@@ -39,13 +39,15 @@ function Assert-Status([string]$Method, [string]$Uri, [int]$Expected, $Body = $n
 }
 
 try {
-    $registro = Assert-Status -Method POST -Uri "$BaseUrl/auth/register" -Expected 201 -Body @{ nombre = 'Usuario temporal'; correo = $correoUsuario; password = $passwordUsuario }
+    $registro = Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/registro" -Expected 201 -Body @{ nombre = 'Usuario temporal'; correo = $correoUsuario; contrasena = $passwordUsuario }
     $usuarioCreado = ($registro.Content | ConvertFrom-Json).data
-    if ($usuarioCreado.correo -ne $correoUsuario -or $usuarioCreado.passwordHash -or $usuarioCreado.password) { throw 'Registration did not return only safe user data.' }
-    Assert-Status -Method POST -Uri "$BaseUrl/auth/register" -Expected 400 -Body @{ nombre = 'Usuario duplicado'; correo = $correoUsuario.ToUpperInvariant(); password = $passwordUsuario }
-    Assert-Status -Method POST -Uri "$BaseUrl/auth/register" -Expected 400 -Body @{ nombre = 'Usuario sin contraseña'; correo = "sin-clave.$([guid]::NewGuid().ToString('N').Substring(0, 8))@example.test" }
-    Assert-Status -Method POST -Uri "$BaseUrl/auth/login" -Expected 401 -Body @{ correo = $correoUsuario; password = 'Clave incorrecta 123!' }
-    Assert-Status -Method GET -Uri "$BaseUrl/auth/me" -Expected 401
+    if ($usuarioCreado.correo -ne $correoUsuario -or $usuarioCreado.rol -ne 'lector' -or $usuarioCreado.contrasenaHash -or $usuarioCreado.contrasena) { throw 'Registration did not return a reader account with safe user data.' }
+    Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/registro" -Expected 400 -Body @{ nombre = 'Usuario duplicado'; correo = $correoUsuario.ToUpperInvariant(); contrasena = $passwordUsuario }
+    Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/registro" -Expected 400 -Body @{ nombre = 'Usuario sin contraseña'; correo = "sin-clave.$([guid]::NewGuid().ToString('N').Substring(0, 8))@example.test" }
+    Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/registro" -Expected 400 -Body @{ nombre = 'Campo no permitido'; correo = "rol.$([guid]::NewGuid().ToString('N').Substring(0, 8))@example.test"; contrasena = $passwordUsuario; rol = 'administrador' }
+    Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/iniciar-sesion" -Expected 400 -Body @{ correo = $correoUsuario; password = $passwordUsuario }
+    Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/iniciar-sesion" -Expected 401 -Body @{ correo = $correoUsuario; contrasena = 'Clave incorrecta 123!' }
+    Assert-Status -Method GET -Uri "$BaseUrl/autenticacion/sesion" -Expected 401
 
     $recursos = @('clientes', 'categorias', 'marcas', 'unidades-medida', 'productos', 'proveedores', 'productos-proveedores', 'compras', 'detalles-compra', 'facturas', 'detalles-factura', 'metodos-pago', 'pagos', 'existencias', 'movimientos-inventario', 'devoluciones', 'detalles-devolucion')
     foreach ($recurso in $recursos) {
@@ -60,13 +62,29 @@ try {
     & node (Join-Path $PSScriptRoot 'check-expired-token.js') $BaseUrl
     if ($LASTEXITCODE -ne 0) { throw 'Expired JWT test failed.' }
 
-    $sesion = Assert-Status -Method POST -Uri "$BaseUrl/auth/login" -Expected 200 -Body @{ correo = $correoUsuario; password = $passwordUsuario }
+    $sesion = Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/iniciar-sesion" -Expected 200 -Body @{ correo = $correoUsuario; contrasena = $passwordUsuario }
     $datosSesion = $sesion.Content | ConvertFrom-Json
-    if ([string]::IsNullOrWhiteSpace($datosSesion.token) -or $datosSesion.usuario.correo -ne $correoUsuario -or $datosSesion.usuario.passwordHash) { throw 'Login did not return a token and safe user data.' }
+    if ([string]::IsNullOrWhiteSpace($datosSesion.token) -or $datosSesion.usuario.correo -ne $correoUsuario -or $datosSesion.usuario.rol -ne 'lector' -or $datosSesion.usuario.contrasenaHash) { throw 'Login did not return a reader token and safe user data.' }
     $script:AccessToken = $datosSesion.token
-    $yo = Invoke-RestMethod -Method Get -Uri "$BaseUrl/auth/me" -Headers @{ Authorization = "Bearer $script:AccessToken" }
-    if ($yo.data.correo -ne $correoUsuario -or $yo.data.passwordHash) { throw 'GET /auth/me returned unexpected or sensitive user data.' }
-    Write-Host 'OK GET /auth/me -> authenticated safe user'
+    $yo = Invoke-RestMethod -Method Get -Uri "$BaseUrl/autenticacion/sesion" -Headers @{ Authorization = "Bearer $script:AccessToken" }
+    if ($yo.data.correo -ne $correoUsuario -or $yo.data.rol -ne 'lector' -or $yo.data.contrasenaHash) { throw 'GET /autenticacion/sesion returned unexpected or sensitive user data.' }
+    Write-Host 'OK GET /autenticacion/sesion -> authenticated reader account'
+
+    foreach ($recurso in $recursos) {
+        Assert-Status -Method GET -Uri "$BaseUrl/$recurso" -Expected 200
+        Assert-Status -Method POST -Uri "$BaseUrl/$recurso" -Expected 403 -Body @{}
+        Assert-Status -Method PUT -Uri "$BaseUrl/$recurso/2147483647" -Expected 403 -Body @{}
+        Assert-Status -Method PATCH -Uri "$BaseUrl/$recurso/2147483647" -Expected 403 -Body @{}
+        Assert-Status -Method DELETE -Uri "$BaseUrl/$recurso/2147483647" -Expected 403
+    }
+    Write-Host 'OK reader can query all resources and cannot modify any of them'
+
+    & node (Join-Path $PSScriptRoot 'asignar-rol.js') "--correo=$correoUsuario" '--rol=administrador'
+    if ($LASTEXITCODE -ne 0) { throw 'Could not promote temporary account to administrator for CRUD verification.' }
+    $sesionAdmin = Assert-Status -Method POST -Uri "$BaseUrl/autenticacion/iniciar-sesion" -Expected 200 -Body @{ correo = $correoUsuario; contrasena = $passwordUsuario }
+    $datosAdmin = $sesionAdmin.Content | ConvertFrom-Json
+    if ($datosAdmin.usuario.rol -ne 'administrador') { throw 'Login did not return the promoted administrator role.' }
+    $script:AccessToken = $datosAdmin.token
 
     $response = Assert-Status -Method POST -Uri "$BaseUrl/clientes" -Expected 201 -Body @{ nombre = 'Cliente prueba API'; correo = $correo; telefono = '8888-0000' }
     $clienteId = [int](($response.Content | ConvertFrom-Json).data.id)

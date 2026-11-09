@@ -6,11 +6,11 @@ Sistema comercial integral para minimercados y comercio minorista, compuesto por
 
 ## 🏛️ Arquitectura del Sistema
 
-El modelo relacional cuenta con **18 tablas** transaccionales que gestionan el ciclo completo de inventario, abastecimiento, facturación de caja y devoluciones:
+El modelo relacional cuenta con **19 tablas** que gestionan el acceso y el ciclo completo de inventario, abastecimiento, facturación de caja y devoluciones:
 
 | Módulo | Entidades Principales |
 |---|---|
-| **Acceso y Operación** | `usuarios`, `clientes`, `facturas`, `detalle_factura` |
+| **Acceso y Operación** | `usuarios`, `roles`, `clientes`, `facturas`, `detalle_factura` |
 | **Catálogo y Productos** | `categorias`, `marcas`, `unidades_medida`, `productos` |
 | **Abastecimiento y Proveedores** | `proveedores`, `productos_proveedores`, `compras`, `detalles_compra` |
 | **Punto de Venta e Inventario** | `metodos_pago`, `pagos`, `existencias`, `movimientos_inventario` |
@@ -54,9 +54,9 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_NAME=miniproyecto_ventas_development
 DB_USER=root
-DB_PASSWORD=tu_password
-JWT_SECRET=super_secreto_de_al_menos_32_caracteres_aleatorios
-DEEPSEEK_API_KEY=tu_clave_de_deepseek_opcional
+DB_PASSWORD=
+JWT_SECRET=CAMBIAR
+DEEPSEEK_API_KEY=
 ```
 
 ### 3. Base de Datos y Datos Semilla
@@ -75,11 +75,11 @@ node backend/scripts/seed-mercado.js
 # Terminal 1: Backend API (Puerto 3002)
 npm run dev:backend
 
-# Terminal 2: Frontend Vite (Puerto 5174)
+# Terminal 2: Frontend Vite (Puerto 5175)
 npm run dev:frontend
 ```
 
-* **Frontend:** [http://127.0.0.1:5174](http://127.0.0.1:5174)
+* **Frontend:** [http://127.0.0.1:5175](http://127.0.0.1:5175)
 * **Backend API:** [http://localhost:3002/api](http://localhost:3002/api)
 
 ---
@@ -87,6 +87,7 @@ npm run dev:frontend
 ## 🔐 Seguridad y Autenticación
 
 * Autenticación basada en **JWT (JSON Web Tokens)** con expiración y hash de contraseñas mediante **bcrypt**.
+* Roles `administrador` y `lector`: ambos pueden consultar; solo administración puede crear, actualizar o eliminar. El registro asigna `lector` por defecto.
 * Reseteo automático de controles nativos del navegador (`color-scheme: dark`) y protección estricta contra inyecciones SQL vía consultas parametrizadas de Sequelize.
 * Las API keys de IA y credenciales residen exclusivamente en el servidor backend; el frontend no expone secretos.
 
@@ -102,5 +103,13 @@ npm run smoke:api
 # Pruebas integrales de flujo transaccional de negocio
 npm run smoke:domain
 ```
+
+Para promover una cuenta registrada a administrador, ejecutá desde `backend`:
+
+```powershell
+npm.cmd run usuario:asignar-rol -- --correo=tu-correo@ejemplo.com --rol=administrador
+```
+
+Las rutas públicas, privadas y la matriz completa de permisos están en [docs/investigacion-jwt-dia-2.md](docs/investigacion-jwt-dia-2.md).
 
 Colección de pruebas para Thunder Client / Postman disponible en `docs/thunder-client-dia-2.postman_collection.json`.
